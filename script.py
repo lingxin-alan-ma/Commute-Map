@@ -18,7 +18,7 @@ url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&"
 
 # get response 
 r = requests.get(url + "origins=" + home + "&destinations=" + work + "&key=" + api_key)
-
+print(r.json())
 # return time as text and as seconds 
 time = r.json()["rows"][0]["elements"][0]["duration"]["text"]
 seconds = r.json()["rows"][0]["elements"][0]["duration"]["value"]
