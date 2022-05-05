@@ -1,4 +1,6 @@
 import requests 
+import csv
+from datetime import date, datetime 
 # import smtplib 
 
 # API key 
@@ -25,20 +27,29 @@ school = "360 Huntington Ave, Boston, MA 02115"
 # base url 
 url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&"
 
-for home in homes:
-    # get response
-    r_work = requests.get(url + "origins=" + home + "&destinations=" + work + "&key=" + api_key)
-    r_school = requests.get(url + "origins=" + home + "&destinations=" + school + "&key=" + api_key)
+fieldanmes = ['start', 'dest', 'date', 'start_time', 'travel_time']
+date = date.today().strftime("%m/%d/%Y")    #current time
+start_time = datetime.now().strftime("%H:%M")   #start time
 
-    # return time as text and as seconds 
-    time_work = r_work.json()["rows"][0]["elements"][0]["duration"]["text"]
-    time_school = r_school.json()["rows"][0]["elements"][0]["duration"]["text"]
+# write to csv
+with open('commute_time.csv', mode='a') as csv_file:
+    time_writer = csv.writer(csv_file, delimiter='|', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
 
-    # seconds = r.json()["rows"][0]["elements"][0]["duration"]["value"]
+    for home in homes:
+        # get response
+        r_work = requests.get(url + "origins=" + home + "&destinations=" + work + "&key=" + api_key)
+        r_school = requests.get(url + "origins=" + home + "&destinations=" + school + "&key=" + api_key)
 
-    # print the total travel time 
-    print("Time from", home, "to")
-    print("work:", time_work)
-    print("school:", time_school, "\n")
-    
-    # print("Time from", home, "to school is", time_school, "\n")
+        # return time as text and as seconds 
+        time_work = r_work.json()["rows"][0]["elements"][0]["duration"]["text"]
+        time_school = r_school.json()["rows"][0]["elements"][0]["duration"]["text"]
+        
+        time_writer.writerow([home, work, date, start_time, time_work])
+        time_writer.writerow([home, school, date, start_time, time_school])
+        
+        '''
+        # print the total travel time 
+        print("Time from", home, "to")
+        print("work:", time_work)
+        print("school:", time_school, "\n")
+        ''' 
