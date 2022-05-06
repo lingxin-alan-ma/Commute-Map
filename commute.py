@@ -37,12 +37,11 @@ with open('commute_time.csv', mode='a') as csv_file:
 
     for home in homes:
         # get response
-        r_work = requests.get(url + "origins=" + home + "&destinations=" + work + "&key=" + api_key)
-        r_school = requests.get(url + "origins=" + home + "&destinations=" + school + "&key=" + api_key)
-
+        r_work = requests.get(url + "origins=" + home + "&destinations=" + work + "&departure_time=now&key=" + api_key)
+        r_school = requests.get(url + "origins=" + home + "&destinations=" + school + "&departure_time=now&key=" + api_key)
         # return time as text and as seconds 
-        time_work = r_work.json()["rows"][0]["elements"][0]["duration"]["text"]
-        time_school = r_school.json()["rows"][0]["elements"][0]["duration"]["text"]
+        time_work = r_work.json()["rows"][0]["elements"][0]["duration_in_traffic"]["text"]
+        time_school = r_school.json()["rows"][0]["elements"][0]["duration_in_traffic"]["text"]
         
         time_writer.writerow([home, work, date, start_time, time_work])
         time_writer.writerow([home, school, date, start_time, time_school])
