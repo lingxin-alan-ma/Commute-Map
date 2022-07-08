@@ -51,4 +51,4 @@
 |202 SecondApartment Ln, City, ST 01234|1 Work St, City, ST 01234   |05/10/2022|19:42     |20 mins    |
 |202 SecondApartment Ln, City, ST 01234|1 School Ave, City, ST 01234|05/10/2022|19:42     |17 mins    |
 
-## Household can decide which apartment better suits their needs based on the daily commute time to work and school. 
+### Household individuals can decide which apartment better suits their needs based on the daily commute time to work and school. 
