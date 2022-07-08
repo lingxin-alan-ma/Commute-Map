@@ -1,7 +1,7 @@
 import requests 
 import csv
+import json 
 from datetime import date, datetime 
-# import smtplib 
 
 # API key 
 # distance matrix api
@@ -9,20 +9,21 @@ api_file = open("api-key.txt", "r")
 api_key = api_file.read()
 api_file.close() 
 
+# open address json file
+f = open('address.json')
+addr = json.load(f)
+
 # home address
-# home = input("Enter a home address\n")
-homes = []
-# homes.append("Malden, MA")
-# homes.append("Boston, MA")
-homes.append("37 Rockwell St, Malden, MA 02148")
-homes.append("1 Hummingbird Ln, Boston, MA 02126")
+home = addr['home'] 
 
 # work address 
-# work = input("Enter a work address\n")
-work = "640 Memorial Dr, Cambridge, MA 02139"
+work = addr['work'] 
 
 # school address
-school = "360 Huntington Ave, Boston, MA 02115"
+school = addr['school'] 
+
+# close json file
+f.close()
 
 # base url 
 url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&"
@@ -32,7 +33,8 @@ date = date.today().strftime("%m/%d/%Y")    #current time
 start_time = datetime.now().strftime("%H:%M")   #start time
 
 # write to csv
-with open('commute_time.csv', mode='a') as csv_file:
+with open('commute_time_sample.csv', mode='a') as csv_file:
+    # using | as delimiter as there are "," in address
     time_writer = csv.writer(csv_file, delimiter='|', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
 
     for home in homes:
@@ -45,10 +47,4 @@ with open('commute_time.csv', mode='a') as csv_file:
         
         time_writer.writerow([home, work, date, start_time, time_work])
         time_writer.writerow([home, school, date, start_time, time_school])
-        
-        '''
-        # print the total travel time 
-        print("Time from", home, "to")
-        print("work:", time_work)
-        print("school:", time_school, "\n")
-        ''' 
+       
